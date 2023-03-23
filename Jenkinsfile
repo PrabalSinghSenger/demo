@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'maven'
+        maven 'maven-3.5.0'
     }
 
     stages {
@@ -24,4 +24,15 @@ pipeline {
             }
         }
     }
+    
+  stage('SCM') {
+    checkout scm
+  }
+  stage('SonarQube Analysis') {
+    def mvn = tool 'maven';
+    withSonarQubeEnv() {
+      sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=demo"
+    }
+  }
+
 }
