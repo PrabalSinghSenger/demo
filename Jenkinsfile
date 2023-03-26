@@ -24,25 +24,22 @@ pipeline {
             }
         }
          
+	    stage('Sonarqube') {
+    environment {
+        scannerHome = tool 'SonarQuebeScanner'
+    }
+    steps {
+        withSonarQubeEnv('sonarqube') {
+            sh "${scannerHome}/bin/sonar-scanner"
+        }
+        timeout(time: 10, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+        }
+    }
+}
         
     }
     
  
   }
 
-
-node {
-  stage('SCM') {
-    git 'https://github.com/PrabalSinghSenger/demo'
-  }
-  stage('SonarQube analysis') {
-    withSonarQubeEnv(
-	  credentialsId: 'squ_fd8310db13eac19fefeecc332f8fa455b6f15ebe', 
-	  installationName: 'SonarQuebeScanner') { 
-	  // You can override the credential to be used
-      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-    }
-  }
-}
-}
-}
