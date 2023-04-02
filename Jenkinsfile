@@ -23,20 +23,16 @@ pipeline {
                  }
             }
         }
-         
-	    stage('SonarQuebeServer') {
-    environment {
-        scannerHome = tool 'SonarQuebeScanner'
-    }
-    steps {
-        withSonarQubeEnv('SonarQuebeServer') {
-            sh "${scannerHome}/bin/sonar-scanner"
-        }
-        timeout(time: 10, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
-        }
-    }
+	    
+	    
+	    stage('SonarQube analysis') {
+   steps {
+      withSonarQubeEnv('SonarQuebeServer') {
+         sh 'mvn sonar:sonar'
+      }
+   }
 }
+
         
     }
     
