@@ -28,7 +28,7 @@ pipeline {
 	    stage('SonarQube analysis') {
    steps {
       withSonarQubeEnv('SonarQuebeServer') {
-         sh 'mvn sonar:sonar'
+         sh 'mvn sonar:sonar -Dsonar.login=sqa_5ea306726a93148ddf4d44d102cadeaa4bf62d7f'
       }
    }
 }
